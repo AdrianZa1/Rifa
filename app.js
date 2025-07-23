@@ -66,5 +66,19 @@ function mostrarTabla(datos) {
   });
 }
 
-cargarDatos();
-setInterval(cargarDatos, 30000); // Recarga cada 30s
+function buscarNumero() {
+  const numeroBuscado = document.getElementById("numeroExacto").value.trim();
+  if (!numeroBuscado) {
+    alert("Ingresa un número para buscar.");
+    return;
+  }
+
+  const resultados = datosOriginales.filter(row => row["n"] === numeroBuscado);
+
+  if (resultados.length === 0) {
+    document.getElementById("tabla-rifa").innerHTML = `<tr><td colspan="3">El número ${numeroBuscado} no está en la lista.</td></tr>`;
+    return;
+  }
+
+  mostrarTabla(resultados);
+}
