@@ -1,0 +1,63 @@
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f9fafb;
+  padding: 20px;
+  text-align: center;
+}
+
+h1 {
+  color: #333;
+}
+
+.tabla-container {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+table {
+  width: 95%;
+  border-collapse: collapse;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  background: white;
+}
+
+th, td {
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+th {
+  background-color: #007bff;
+  color: white;
+}
+
+.disponible {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.no-disponible {
+  background-color: #f8d7da;
+  color: rgb(207, 59, 74, 0.2);
+}
+.disponible {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.ocupado {
+  background-color: #f8d7da;
+  color: rgba(0, 0, 0,);
+}
+#filtros {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+#filtros label {
+  font-weight: bold;
+}
