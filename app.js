@@ -66,19 +66,15 @@ function mostrarTabla(datos) {
   });
 }
 
-function buscarNumero() {
-  const numeroBuscado = document.getElementById("numeroExacto").value.trim();
-  if (!numeroBuscado) {
-    alert("Ingresa un número para buscar.");
-    return;
-  }
+cargarDatos();
+setInterval(cargarDatos, 30000); // Recarga cada 30s
+// Modal control
+const modal = document.getElementById("modal");
+const btnInfo = document.getElementById("btnInfo");
+const cerrar = document.getElementById("cerrar");
 
-  const resultados = datosOriginales.filter(row => row["n"] === numeroBuscado);
-
-  if (resultados.length === 0) {
-    document.getElementById("tabla-rifa").innerHTML = `<tr><td colspan="3">El número ${numeroBuscado} no está en la lista.</td></tr>`;
-    return;
-  }
-
-  mostrarTabla(resultados);
-}
+btnInfo.onclick = () => modal.style.display = "block";
+cerrar.onclick = () => modal.style.display = "none";
+window.onclick = (event) => {
+  if (event.target === modal) modal.style.display = "none";
+};
