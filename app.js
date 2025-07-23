@@ -5,7 +5,7 @@ function cargarDatos() {
   fetch(sheetURL)
     .then(res => res.json())
     .then(data => {
-      datosOriginales = data.filter(row => row["n"]); // Guarda los datos una sola vez
+      datosOriginales = data.filter(row => row["n"]); // Solo filas con número
       aplicarFiltros();
     })
     .catch(err => {
@@ -16,36 +16,39 @@ function cargarDatos() {
 
 function aplicarFiltros() {
   const estado = document.getElementById("estado").value;
-  const desde = parseInt(document.getElementById("desde").value);
-  const hasta = parseInt(document.getElementById("hasta").value);
+  const numeroExacto = document.getElementById("numeroExacto").value.trim();
 
-  let datosFiltrados = datosOriginales.filter(row => {
-    const numero = parseInt(row["n"]);
-    const nombre = row["Nombre"];
-    const apellido = row["Apellido"];
-    const ocupado = nombre || apellido;
+  let datosFiltrados = [];
 
-    let cumpleEstado =
-      estado === "todos" ||
-      (estado === "disponibles" && !ocupado) ||
-      (estado === "ocupados" && ocupado);
+  if (numeroExacto) {
+    datosFiltrados = datosOriginales.filter(
+      row => parseInt(row["n"]) === parseInt(numeroExacto)
+    );
+  } else {
+    datosFiltrados = datosOriginales.filter(row => {
+      const nombre = row["Nombre"];
+      const apellido = row["Apellido"];
+      const ocupado = nombre || apellido;
 
-    let cumpleRango =
-      (!desde || numero >= desde) &&
-      (!hasta || numero <= hasta);
+      return (
+        estado === "todos" ||
+        (estado === "disponibles" && !ocupado) ||
+        (estado === "ocupados" && ocupado)
+      );
+    });
+  }
 
-    return cumpleEstado && cumpleRango;
-  });
-
-  mostrarTabla(datosFiltrados);
+  mostrarTabla(datosFiltrados, numeroExacto);
 }
 
-function mostrarTabla(datos) {
+function mostrarTabla(datos, numeroExacto = "") {
   const tbody = document.getElementById("tabla-rifa");
   tbody.innerHTML = "";
 
   if (datos.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="3">No se encontraron resultados.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="3">
+      ${numeroExacto ? `El número ${numeroExacto} no está en la lista.` : "No se encontraron resultados."}
+    </td></tr>`;
     return;
   }
 
@@ -67,14 +70,4 @@ function mostrarTabla(datos) {
 }
 
 cargarDatos();
-setInterval(cargarDatos, 30000); // Recarga cada 30s
-// Modal control
-const modal = document.getElementById("modal");
-const btnInfo = document.getElementById("btnInfo");
-const cerrar = document.getElementById("cerrar");
-
-btnInfo.onclick = () => modal.style.display = "block";
-cerrar.onclick = () => modal.style.display = "none";
-window.onclick = (event) => {
-  if (event.target === modal) modal.style.display = "none";
-};
+setInterval(cargarDatos, 30000);
