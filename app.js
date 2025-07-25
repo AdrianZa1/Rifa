@@ -43,15 +43,25 @@ function aplicarFiltros() {
 
 function mostrarTabla(datos, numeroExacto = "") {
   const tbody = document.getElementById("tabla-rifa");
+  const contador = document.getElementById("contador-resultados");
   tbody.innerHTML = "";
 
   if (datos.length === 0) {
     tbody.innerHTML = `<tr><td colspan="3">
       ${numeroExacto ? `El número ${numeroExacto} no está en la lista.` : "No se encontraron resultados."}
     </td></tr>`;
+    contador.textContent = "0 resultados encontrados";
     return;
   }
 
+  // Calcular ocupados y disponibles
+  const ocupados = datos.filter(row => row["Nombre"] || row["Apellido"]).length;
+  const disponibles = datos.length - ocupados;
+
+  // Mostrar contador dinámico
+  contador.textContent = `${datos.length} resultados encontrados | ${ocupados} ocupados | ${disponibles} disponibles`;
+
+  // Llenar la tabla
   datos.forEach(row => {
     const numero = row["n"];
     const nombre = row["Nombre"];
@@ -69,5 +79,6 @@ function mostrarTabla(datos, numeroExacto = "") {
   });
 }
 
+// Cargar datos inicialmente y refrescar cada 30 segundos
 cargarDatos();
 setInterval(cargarDatos, 30000);
